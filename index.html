@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Sipariş</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-size: 20px;
+      margin-top: 30px;
+    }
+    label {
+      display: block;
+      padding: 10px;
+      background: white;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      margin-right: 10px;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: vertical;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      background-color: #25D366;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 30px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1ebe5d;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Yemek Siparişi</h1>
+
+  <h2>Ana Yemek</h2>
+  <label><input type="checkbox" name="menu" value="Et"> Et</label>
+  <label><input type="checkbox" name="menu" value="Tavuk"> Tavuk</label>
+  <label><input type="checkbox" name="menu" value="Balık"> Balık</label>
+
+  <h2>İçecek</h2>
+  <label><input type="checkbox" name="menu" value="Ayran"> Ayran</label>
+  <label><input type="checkbox" name="menu" value="Gazoz"> Gazoz</label>
+
+  <h2>Adres</h2>
+  <textarea id="adres" rows="3" placeholder="Teslimat adresinizi yazınız..."></textarea>
+
+  <button onclick="gonder()">WhatsApp ile Sipariş Ver</button>
+
+  <script>
+    function gonder() {
+      const secilenler = [...document.querySelectorAll('input[name="menu"]:checked')]
+        .map(el => el.value)
+        .join(", ");
+      const adres = document.getElementById('adres').value.trim();
+
+      if (!secilenler) {
+        alert("Lütfen en az bir ürün seçin.");
+        return;
+      }
+
+      if (!adres) {
+        alert("Lütfen adres giriniz.");
+        return;
+      }
+
+      const mesaj = `Merhaba, sipariş vermek istiyorum:\nÜrünler: ${secilenler}\nAdres: ${adres}`;
+      const tel = "905XXXXXXXXX"; // ← Kendi numaranı buraya yaz
+      const url = `https://wa.me/${tel}?text=${encodeURIComponent(mesaj)}`;
+      window.open(url, '_blank');
+    }
+  </script>
+
+</body>
+</html>
