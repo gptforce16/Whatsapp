@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WhatsApp Sipariş</title>
   <style>
     body {
@@ -12,25 +12,29 @@
       background-color: #f9f9f9;
     }
     h1 {
-      font-size: 24px;
       text-align: center;
-      margin-bottom: 20px;
     }
     h2 {
-      font-size: 20px;
       margin-top: 30px;
     }
-    label {
-      display: block;
-      padding: 10px;
-      background: white;
+    .urun {
+      display: flex;
+      align-items: center;
       margin-bottom: 10px;
+      background: white;
+      padding: 10px;
       border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    input[type="checkbox"] {
-      transform: scale(1.2);
-      margin-right: 10px;
+    .urun label {
+      flex: 1;
+    }
+    .urun input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      margin-left: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
     textarea {
       width: 100%;
@@ -62,13 +66,13 @@
   <h1>Yemek Siparişi</h1>
 
   <h2>Ana Yemek</h2>
-  <label><input type="checkbox" name="menu" value="Et"> Et</label>
-  <label><input type="checkbox" name="menu" value="Tavuk"> Tavuk</label>
-  <label><input type="checkbox" name="menu" value="Balık"> Balık</label>
+  <div class="urun"><label>Et</label><input type="number" min="0" value="0" id="Et"></div>
+  <div class="urun"><label>Tavuk</label><input type="number" min="0" value="0" id="Tavuk"></div>
+  <div class="urun"><label>Balık</label><input type="number" min="0" value="0" id="Balık"></div>
 
   <h2>İçecek</h2>
-  <label><input type="checkbox" name="menu" value="Ayran"> Ayran</label>
-  <label><input type="checkbox" name="menu" value="Gazoz"> Gazoz</label>
+  <div class="urun"><label>Ayran</label><input type="number" min="0" value="0" id="Ayran"></div>
+  <div class="urun"><label>Gazoz</label><input type="number" min="0" value="0" id="Gazoz"></div>
 
   <h2>Adres</h2>
   <textarea id="adres" rows="3" placeholder="Teslimat adresinizi yazınız..."></textarea>
@@ -77,13 +81,20 @@
 
   <script>
     function gonder() {
-      const secilenler = [...document.querySelectorAll('input[name="menu"]:checked')]
-        .map(el => el.value)
-        .join(", ");
-      const adres = document.getElementById('adres').value.trim();
+      const urunler = ["Et", "Tavuk", "Balık", "Ayran", "Gazoz"];
+      let secilenler = "";
+      
+      urunler.forEach(u => {
+        const adet = parseInt(document.getElementById(u).value);
+        if (adet > 0) {
+          secilenler += `${u}: ${adet} adet\n`;
+        }
+      });
+
+      const adres = document.getElementById("adres").value.trim();
 
       if (!secilenler) {
-        alert("Lütfen en az bir ürün seçin.");
+        alert("Lütfen en az bir ürün ve adet giriniz.");
         return;
       }
 
@@ -92,7 +103,7 @@
         return;
       }
 
-      const mesaj = `Merhaba, sipariş vermek istiyorum:\nÜrünler: ${secilenler}\nAdres: ${adres}`;
+      const mesaj = `Merhaba, sipariş vermek istiyorum:\n${secilenler}\nAdres: ${adres}`;
       const tel = "905XXXXXXXXX"; // ← Kendi numaranı buraya yaz
       const url = `https://wa.me/${tel}?text=${encodeURIComponent(mesaj)}`;
       window.open(url, '_blank');
